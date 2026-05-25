@@ -5,12 +5,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
-  { num: '01', type: 'MOBILE APP · UI/UX CASE STUDY', title: 'AMARA', sub: 'Fashion Commerce Experience', desc: 'Visual discovery meets frictionless checkout. Every scroll, swipe, and state designed around how fashion buyers actually think.', tags: ['FIGMA', 'MOBILE UI', 'E-COMMERCE', 'USER FLOWS'], link: 'https://www.behance.net/gallery/242442917/AMARA-Fashion-Commerce-App-Design', img: '/project-amara.jpg' },
-  { num: '02', type: 'INTERACTIVE PROTOTYPE · UX', title: 'AMARA', sub: 'Interactive Prototype', desc: 'The living version. Fully interactive Figma prototype — complete user journeys, micro-interactions, transition logic.', tags: ['FIGMA PROTOTYPE', 'INTERACTION', 'ANIMATION'], link: 'https://www.behance.net/gallery/242443297/AMARA-Interactive-Fashion-Commerce-Prototype', img: '/project-amara2.jpg' },
-  { num: '03', type: 'BRAND IDENTITY · PACKAGING', title: 'VRIKOPRO', sub: 'Fitness Supplement Brand', desc: 'Logo, packaging, full visual language for a fitness brand. Built for a market that buys with its eyes and stays with trust.', tags: ['LOGO DESIGN', 'PACKAGING', 'BRAND SYSTEM'], link: 'https://www.behance.net/gallery/247084463/Vrikopro-Fitness-Supplement-Branding-Case-Study', img: '/project-vrikopro.jpg' },
-  { num: '04', type: 'WEB UI · SAAS CONCEPT', title: 'AI SAAS', sub: 'Landing Page UX Concept', desc: 'High-converting SaaS landing page for an AI product. Aggressive visual hierarchy. Persuasion design baked into every section.', tags: ['SAAS UI', 'LANDING PAGE', 'CONVERSION UX'], link: 'https://www.behance.net/gallery/248945475/AI-SaaS-Landing-Page-UIUX-Concept', img: '/project-saas.jpg' },
-  { num: '05', type: 'WEB PROTOTYPE · INTERACTIVE', title: 'DEFENDER', sub: 'Octa Black Web Prototype', desc: 'Dark-themed, premium interactive web prototype. Bold transitions that match the product identity. Built for power.', tags: ['WEB PROTOTYPE', 'DARK UI', 'PRODUCT DESIGN'], link: 'https://www.behance.net/gallery/242402253/DEFENDER-Octa-Black-Interactive-Web-Prototype', img: '/project-defender.jpg' },
-  { num: '06', type: 'MOBILE APP · FOOD TECH', title: 'ZESTYY', sub: 'Food Delivery App', desc: 'Full UX case study. Research to final UI. Turns hunger into a three-tap order. Appetising from screen one.', tags: ['UX RESEARCH', 'MOBILE APP', 'USER JOURNEY'], link: 'https://www.behance.net/gallery/244617653/Zestyy-Food-Delivery-App-UIUX-Case-Study', img: '/project-zestyy.jpg' },
+  { num: '01', type: 'MOBILE APP · UI/UX CASE STUDY', title: 'AMARA', sub: 'Fashion Commerce Experience', desc: 'Visual discovery meets frictionless checkout. Every scroll, swipe, and state designed around how fashion buyers actually think.', tags: ['FIGMA', 'MOBILE UI', 'E-COMMERCE', 'USER FLOWS'], link: 'https://www.behance.net/gallery/242442917/AMARA-Fashion-Commerce-App-Design', img: '/project-amara.webp' },
+  { num: '02', type: 'INTERACTIVE PROTOTYPE · UX', title: 'AMARA', sub: 'Interactive Prototype', desc: 'The living version. Fully interactive Figma prototype — complete user journeys, micro-interactions, transition logic.', tags: ['FIGMA PROTOTYPE', 'INTERACTION', 'ANIMATION'], link: 'https://www.behance.net/gallery/242443297/AMARA-Interactive-Fashion-Commerce-Prototype', img: '/project-amara2.webp' },
+  { num: '03', type: 'BRAND IDENTITY · PACKAGING', title: 'VRIKOPRO', sub: 'Fitness Supplement Brand', desc: 'Logo, packaging, full visual language for a fitness brand. Built for a market that buys with its eyes and stays with trust.', tags: ['LOGO DESIGN', 'PACKAGING', 'BRAND SYSTEM'], link: 'https://www.behance.net/gallery/247084463/Vrikopro-Fitness-Supplement-Branding-Case-Study', img: '/project-vrikopro.webp' },
+  { num: '04', type: 'WEB UI · SAAS CONCEPT', title: 'AI SAAS', sub: 'Landing Page UX Concept', desc: 'High-converting SaaS landing page for an AI product. Aggressive visual hierarchy. Persuasion design baked into every section.', tags: ['SAAS UI', 'LANDING PAGE', 'CONVERSION UX'], link: 'https://www.behance.net/gallery/248945475/AI-SaaS-Landing-Page-UIUX-Concept', img: '/project-saas.webp' },
+  { num: '05', type: 'WEB PROTOTYPE · INTERACTIVE', title: 'DEFENDER', sub: 'Octa Black Web Prototype', desc: 'Dark-themed, premium interactive web prototype. Bold transitions that match the product identity. Built for power.', tags: ['WEB PROTOTYPE', 'DARK UI', 'PRODUCT DESIGN'], link: 'https://www.behance.net/gallery/242402253/DEFENDER-Octa-Black-Interactive-Web-Prototype', img: '/project-defender.webp' },
+  { num: '06', type: 'MOBILE APP · FOOD TECH', title: 'ZESTYY', sub: 'Food Delivery App', desc: 'Full UX case study. Research to final UI. Turns hunger into a three-tap order. Appetising from screen one.', tags: ['UX RESEARCH', 'MOBILE APP', 'USER JOURNEY'], link: 'https://www.behance.net/gallery/244617653/Zestyy-Food-Delivery-App-UIUX-Case-Study', img: '/project-zestyy.webp' },
 ]
 
 export default function Projects() {
@@ -40,8 +40,7 @@ export default function Projects() {
         Six case studies. Six systems. Each one a full design story — from problem to pixel — published on Behance.
       </p>
 
-      {/* Drop your Behance banner images with these filenames into /public/ */}
-      {/* project-amara.jpg, project-amara2.jpg, project-vrikopro.jpg, project-saas.jpg, project-defender.jpg, project-zestyy.jpg */}
+  
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2px' }}>
         {projects.map((p) => (
@@ -67,7 +66,7 @@ export default function Projects() {
                 onError={e => { (e.currentTarget as HTMLElement).style.display = 'none' }}
               />
               <div className="p-overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8))', opacity: 0.7, transition: 'opacity 0.4s' }} />
-              <div style={{ position: 'absolute', top: '20px', left: '20px', ...MONO, fontSize: '9px', letterSpacing: '0.35em', color: '#CC0000', textTransform: 'uppercase' }}>{p.type}</div>
+
               <div style={{ position: 'absolute', top: '20px', right: '20px', ...MONO, fontSize: '10px', letterSpacing: '0.2em', color: 'rgba(240,237,232,0.3)' }}>{p.num} / 06</div>
             </div>
 
