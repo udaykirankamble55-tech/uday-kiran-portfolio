@@ -367,7 +367,7 @@ export default function Nav() {
           {/* RESUME */}
 
           <a
-            href="resume.pdf.pdf"
+            href="resume.pdf"
             download
             className="nav-cta"
           >
