@@ -1,38 +1,117 @@
 'use client'
-import { useEffect } from 'react'
 
-export default function Cursor() {
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+
+export default function CustomCursor() {
+  const cursorRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    const cursor = document.getElementById('cursor')
-    const ring = document.getElementById('cursor-ring')
-    if (!cursor || !ring) return
+    const cursor = cursorRef.current
+    if (!cursor) return
 
-    let mx = 0, my = 0, rx = 0, ry = 0
+    // Hidden initially to prevent a sudden visual pop on load
+    gsap.set(cursor, { opacity: 0, scale: 1 })
 
-    document.addEventListener('mousemove', (e) => {
-      mx = e.clientX; my = e.clientY
-      cursor.style.transform = `translate(${mx - 4}px,${my - 4}px)`
-    })
-
-    const animRing = () => {
-      rx += (mx - rx) * 0.11
-      ry += (my - ry) * 0.11
-      ring.style.transform = `translate(${rx - 16}px,${ry - 16}px)`
-      requestAnimationFrame(animRing)
+    // 1. Smoothly track cursor coordinates
+    const moveCursor = (e: MouseEvent) => {
+      gsap.to(cursor, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.1,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      })
+      gsap.to(cursor, { opacity: 1, duration: 0.2 })
     }
-    animRing()
 
-    const hoverEls = document.querySelectorAll('a, button, .mag-btn')
-    hoverEls.forEach(el => {
-      el.addEventListener('mouseenter', () => ring.classList.add('hovered'))
-      el.addEventListener('mouseleave', () => ring.classList.remove('hovered'))
-    })
+    // 2. Dynamic Hover Handler (Handles any current or future buttons seamlessly)
+    const handleMouseOver = (e: MouseEvent) => {
+      // Find closest interactive element if hovering child elements
+      const target = (e.target as HTMLElement).closest('.nav-link, .nav-cta, .social-icon, .project-card-trigger, .mag') as HTMLElement
+      
+      if (!target) {
+        // If we aren't hovering an interactive item, keep cursor at standard size
+        gsap.to(cursor, {
+          width: '8px',
+          height: '8px',
+          scale: 1,
+          borderRadius: '50%',
+          backgroundColor: '#CC0000',
+          borderColor: 'transparent',
+          mixBlendMode: 'normal',
+          duration: 0.3,
+          ease: 'power2.out'
+        })
+        return
+      }
+
+      // If it's a prominent main CTA button, dynamically frame it magnetically
+      if (target.classList.contains('nav-cta')) {
+        const rect = target.getBoundingClientRect()
+        gsap.to(cursor, {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+          width: rect.width + 12,
+          height: rect.height + 12,
+          borderRadius: '4px',
+          backgroundColor: 'rgba(204, 0, 0, 0.1)',
+          borderColor: '#CC0000',
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        })
+      } else {
+        // Expand/invert cursor for text links and simple icons
+        gsap.to(cursor, {
+          scale: 2.5,
+          backgroundColor: '#CC0000',
+          borderColor: 'transparent',
+          mixBlendMode: 'difference',
+          duration: 0.2,
+          overwrite: 'auto'
+        })
+      }
+    }
+
+    // Bind global listeners to window
+    window.addEventListener('mousemove', moveCursor)
+    window.addEventListener('mouseover', handleMouseOver)
+
+    // Perfectly clean up memory allocations when unmounting
+    return () => {
+      window.removeEventListener('mousemove', moveCursor)
+      window.removeEventListener('mouseover', handleMouseOver)
+    }
   }, [])
 
   return (
     <>
-      <div id="cursor" />
-      <div id="cursor-ring" />
+      <style>{`
+        body {
+          cursor: none !important;
+        }
+        a, button, select, input, .mag, .nav-cta {
+          cursor: none !important;
+        }
+      `}</style>
+      <div
+        ref={cursorRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '8px',
+          height: '8px',
+          backgroundColor: '#CC0000',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 9999,
+          transform: 'translate(-50%, -50%)',
+          border: '1px solid transparent',
+          transition: 'background-color 0.2s, border-color 0.2s',
+        }}
+      />
     </>
   )
 }

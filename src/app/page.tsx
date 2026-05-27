@@ -1,6 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import Cursor from '@/components/Cursor'
+import { CosmosBackground } from '@/components/CosmosBackground'
 import Intro from '@/components/Intro'
 import Nav from '@/components/Nav'
 import ScrollyCanvas from '@/components/ScrollyCanvas'
@@ -29,8 +30,14 @@ export default function Home() {
   }, [])
 
   return (
-    <main>
+    <main style={{ position: 'relative', width: '100%', minHeight: '100vh', overflowX: 'hidden' }}>
+      {/* 1. Global Interactive Background Canvas Layer */}
+      <CosmosBackground />
+
+      {/* 2. Interactive Custom Fixed Cursor Overlay */}
       <Cursor />
+      
+      {/* 3. Page Assembly Sections */}
       <Intro />
       <Nav />
       <ScrollyCanvas />
