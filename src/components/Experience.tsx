@@ -6,12 +6,42 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function Experience() {
   const ref = useRef<HTMLElement>(null)
+  
   useEffect(() => {
+    // Reveal handler for labels and list items
     ref.current?.querySelectorAll('.reveal, .exp-item').forEach(el => {
+      // Skip the h2 elements here so they don't get double-animated by the default fade
+      if (el.tagName === 'H2') return
+      
       gsap.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } })
     })
+    
+    // Timeline vertical tracking line animation
     ref.current?.querySelectorAll('.exp-line').forEach(el => {
       gsap.fromTo(el, { height: 0 }, { height: '100%', duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 80%' } })
+    })
+
+    // Clean Scroll-Triggered mask animation directly on the original H2 elements
+    ref.current?.querySelectorAll('h2.reveal').forEach(h2 => {
+      gsap.fromTo(h2, 
+        { 
+          opacity: 0,
+          clipPath: 'polygon(0 0, 100% 0, 100% 0%, 0 0%)',
+          y: 30
+        }, 
+        { 
+          opacity: 1,
+          clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+          y: 0,
+          duration: 1.1, 
+          ease: 'power4.out', 
+          scrollTrigger: { 
+            trigger: h2, 
+            start: 'top 88%',
+            toggleActions: 'play none none reset'
+          } 
+        }
+      )
     })
   }, [])
 

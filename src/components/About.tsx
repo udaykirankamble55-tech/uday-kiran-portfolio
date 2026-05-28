@@ -4,80 +4,87 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
+const AVATAR_STANCES = [
+  'avatar-base.webp',
+  'avatar-pockets.webp',
+  'avatar-tilt.webp',
+  'avatar-arms.webp',
+  'avatar-flex.webp',
+  'avatar-glasses.webp'
+]
+
 export default function About() {
-  const ref = useRef<HTMLElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const bgContainerRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    ref.current?.querySelectorAll('.reveal').forEach(el => {
-      gsap.fromTo(el, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } })
+    const section = sectionRef.current
+    if (!section) return
+
+    ScrollTrigger.getAll().forEach(t => { if(t.trigger === section) t.kill() })
+
+    // Revived dynamic looping image sequence
+    const slides = bgContainerRef.current?.querySelectorAll('.bg-avatar-slide')
+    if (slides && slides.length > 0) {
+      const loopTimeline = gsap.timeline({ repeat: -1 })
+      slides.forEach((slide, idx) => {
+        const nextIdx = (idx + 1) % slides.length
+        loopTimeline
+          .to(slide, { opacity: 0.15, scale: 1.04, duration: 2.5, ease: 'power1.inOut' })
+          .to(slide, { opacity: 0, scale: 1.08, duration: 1.0, ease: 'power1.inOut' }, '+=1.5')
+          .fromTo(slides[nextIdx], { opacity: 0, scale: 1.0 }, { opacity: 0.15, scale: 1.04, duration: 1.0, ease: 'power1.inOut' }, '-=1.0')
+      })
+    }
+
+    section.querySelectorAll('.split-reveal').forEach((title) => {
+      const lines = title.querySelectorAll('.line-span')
+      gsap.fromTo(lines, 
+        { y: '100%' },
+        { 
+          y: '0%', 
+          duration: 1.0, 
+          ease: 'power4.out', 
+          stagger: 0.08,
+          scrollTrigger: { trigger: title, start: 'top 88%', toggleActions: 'play none none reset' }
+        }
+      )
     })
   }, [])
 
   const SLAB: React.CSSProperties = { fontFamily: "'Bebas Neue', sans-serif" }
-  const MONO: React.CSSProperties = { fontFamily: "'DM Mono', monospace" }
   const BODY: React.CSSProperties = { fontFamily: "'Barlow Condensed', sans-serif" }
 
   return (
-    <section ref={ref} id="about" style={{ background: '#000', position: 'relative', overflow: 'hidden' }}>
-      {/* BG image with overlay */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <img src="/avatar-hero.gif" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', opacity: 0.08, filter: 'grayscale(100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.97) 100%)' }} />
+    <section ref={sectionRef} id="about" style={{ background: '#000', position: 'relative', overflow: 'hidden', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+      {/* Restored Avatar Image Layers on the Right Side */}
+      <div ref={bgContainerRef} style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '45%', zIndex: 1 }}>
+        {AVATAR_STANCES.map((src, idx) => (
+          <img key={idx} className="bg-avatar-slide" src={src} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', opacity: 0, filter: 'grayscale(100%) brightness(0.4) contrast(1.2)', pointerEvents: 'none' }} />
+        ))}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #000000 0%, rgba(0,0,0,0.4) 30%, transparent 100%)' }} />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 2, padding: '140px 8vw' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '100px', alignItems: 'center' }}>
-          {/* LEFT */}
-          <div>
-            <div className="reveal section-label">001 — ABOUT</div>
-            <h2 className="reveal" style={{ ...SLAB, fontSize: 'clamp(52px, 7vw, 96px)', lineHeight: 0.88, color: '#fff', textTransform: 'uppercase', marginBottom: '36px' }}>
-              BUILT IN<br /><span style={{ color: '#CC0000' }}>HYDERABAD.</span><br />DESIGNED<br />FOR THE WORLD.
-            </h2>
-            <p className="reveal" style={{ ...BODY, fontSize: 'clamp(16px, 1.6vw, 19px)', fontWeight: 600, color: 'rgba(240,237,232,0.85)', lineHeight: 1.75, marginBottom: '20px' }}>
-              I&apos;m <strong style={{ color: '#fff', fontWeight: 600 }}>Uday Kiran Kamble</strong> — UI/UX and Brand Designer from Hyderabad. Marathi roots. Design-first thinking. Fresher with a sharp eye and a sharper process.
-            </p>
-            <p className="reveal" style={{ ...BODY, fontSize: 'clamp(16px, 1.6vw, 19px)', fontWeight: 600, color: 'rgba(240,237,232,0.85)', lineHeight: 1.75, marginBottom: '20px' }}>
-              I just completed a structured 6-month industry-level UI/UX and Graphic Design course from <strong style={{ color: '#fff' }}>Arrow Multimedia, Ameerpet</strong> — a decade-old institute established in 2006. Every project I built during this course went straight to Behance as a real case study.
-            </p>
-            <p className="reveal" style={{ ...BODY, fontSize: 'clamp(16px, 1.6vw, 19px)', fontWeight: 600, color: 'rgba(240,237,232,0.85)', lineHeight: 1.75 }}>
-              I integrate AI tools as <strong style={{ color: '#fff' }}>creative acceleration</strong> — Claude, ChatGPT, Gemini, Canva AI — not as a shortcut, but as a force multiplier for the thinking that machines can&apos;t replace.
-            </p>
+      <div style={{ position: 'relative', zIndex: 2, padding: '4vh max(4vw, 20px)', width: '100%' }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+          {/* Swapped to use your exact global .section-label typography and rules */}
+          <div className="section-label">001 — ABOUT ME</div>
+          
+          <h2 className="split-reveal" style={{ ...SLAB, fontSize: 'clamp(46px, 6.5vw, 88px)', lineHeight: 0.9, color: '#fff', textTransform: 'uppercase', marginBottom: '28px' }}>
+            <span className="line-wrapper"><span className="line-span">BUILT IN</span></span>
+            <span className="line-wrapper"><span className="line-span" style={{ color: '#CC0000' }}>HYDERABAD.</span></span>
+            <span className="line-wrapper"><span className="line-span">DESIGNED FOR THE WORLD.</span></span>
+          </h2>
 
-            {/* STATS */}
-            <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px', marginTop: '48px' }}>
-              {[
-                { num: '6+', label: 'CASE STUDIES' },
-                { num: '6M', label: 'COURSE TRAINED' },
-                { num: 'AI', label: 'INTEGRATED' },
-              ].map((s, i) => (
-                <div key={i} style={{ background: '#0f0f0f', border: '1px solid rgba(204,0,0,0.2)', padding: '24px 20px', position: 'relative', overflow: 'hidden', cursor: 'none' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#CC0000'; (e.currentTarget as HTMLElement).style.background = 'rgba(204,0,0,0.06)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(204,0,0,0.2)'; (e.currentTarget as HTMLElement).style.background = '#0f0f0f' }}
-                >
-                  <div style={{ ...SLAB, fontSize: '52px', color: '#CC0000', lineHeight: 1 }}>{s.num}</div>
-                  <div style={{ ...MONO, fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(240,237,232,0.35)', marginTop: '8px' }}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* RIGHT — IMAGE */}
-          <div className="reveal" style={{ position: 'relative' }}>
-            <div style={{ border: '1px solid rgba(204,0,0,0.3)', overflow: 'hidden', position: 'relative' }}
-              onMouseEnter={e => { const img = e.currentTarget.querySelector('img') as HTMLElement; if (img) { img.style.filter = 'grayscale(0%) brightness(1)'; img.style.transform = 'scale(1.04)' } }}
-              onMouseLeave={e => { const img = e.currentTarget.querySelector('img') as HTMLElement; if (img) { img.style.filter = 'grayscale(30%) brightness(0.8)'; img.style.transform = 'scale(1)' } }}
-            >
-              <img src="/avatar-hero.gif" alt="Uday Kiran" style={{ width: '100%', display: 'block', filter: 'grayscale(30%) brightness(0.8)', transition: 'filter 0.5s, transform 0.5s' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 60%, #000 100%)', pointerEvents: 'none' }} />
-              {/* Red corner */}
-              <div style={{ position: 'absolute', top: 0, right: 0, width: '60px', height: '3px', background: '#CC0000' }} />
-              <div style={{ position: 'absolute', top: 0, right: 0, width: '3px', height: '60px', background: '#CC0000' }} />
-              <div style={{ position: 'absolute', bottom: '20px', left: '20px', ...MONO, fontSize: '9px', letterSpacing: '0.25em', color: '#CC0000', textTransform: 'uppercase' }}>
-                UI/UX DESIGNER · BRAND & VISUAL · HYD
-              </div>
-            </div>
-            {/* Floating tags */}
-            <div className="float-1" style={{ position: 'absolute', top: '15%', right: '-40px', background: '#0f0f0f', border: '1px solid rgba(204,0,0,0.4)', padding: '10px 16px', ...MONO, fontSize: '9px', letterSpacing: '0.2em', color: '#CC0000', textTransform: 'uppercase' }}>UI / UX</div>
-            <div className="float-2" style={{ position: 'absolute', bottom: '20%', left: '-50px', background: '#0f0f0f', border: '1px solid rgba(204,0,0,0.2)', padding: '10px 16px', ...MONO, fontSize: '9px', letterSpacing: '0.15em', color: 'rgba(240,237,232,0.4)', textTransform: 'uppercase' }}>HYD, IN</div>
+          <div style={{ maxWidth: '60%' }}>
+            <p style={{ ...BODY, fontSize: 'clamp(17px, 1.4vw, 21px)', color: 'rgba(240,237,232,0.8)', lineHeight: 1.6, marginBottom: '18px' }}>
+              I&apos;m <strong style={{ color: '#fff' }}>Uday Kiran Kamble</strong> — UI/UX and Brand Designer from Hyderabad with deep Marathi roots. I operate on design-first execution principles, combining a sharp creative eye with a highly refined technical workflow.
+            </p>
+            <p style={{ ...BODY, fontSize: 'clamp(17px, 1.4vw, 21px)', color: 'rgba(240,237,232,0.8)', lineHeight: 1.6, marginBottom: '18px' }}>
+              Recently completed an intensive, industry-level UI/UX and Graphic Design architecture track at <strong style={{ color: '#fff' }}>Arrow Multimedia, Ameerpet</strong>. Every single piece of work built during this cycle was deployed directly to Behance as a live, fully integrated platform case study.
+            </p>
+            <p style={{ ...BODY, fontSize: 'clamp(17px, 1.4vw, 21px)', color: 'rgba(240,237,232,0.8)', lineHeight: 1.6 }}>
+              I harness advanced AI frameworks as <strong style={{ color: '#fff' }}>creative acceleration</strong> — deploying Claude, ChatGPT, Gemini, and Canva AI not as an easy shortcut, but as a powerful force multiplier for deeper design thinking.
+            </p>
           </div>
         </div>
       </div>

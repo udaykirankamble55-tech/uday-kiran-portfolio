@@ -5,22 +5,53 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
-  { num: '01', type: 'MOBILE APP · UI/UX CASE STUDY', title: 'AMARA', sub: 'Fashion Commerce Experience', desc: 'Visual discovery meets frictionless checkout. Every scroll, swipe, and state designed around how fashion buyers actually think.', tags: ['FIGMA', 'MOBILE UI', 'E-COMMERCE', 'USER FLOWS'], link: 'https://www.behance.net/gallery/242442917/AMARA-Fashion-Commerce-App-Design', img: '/project-amara.webp' },
-  { num: '02', type: 'INTERACTIVE PROTOTYPE · UX', title: 'AMARA', sub: 'Interactive Prototype', desc: 'The living version. Fully interactive Figma prototype — complete user journeys, micro-interactions, transition logic.', tags: ['FIGMA PROTOTYPE', 'INTERACTION', 'ANIMATION'], link: 'https://www.behance.net/gallery/242443297/AMARA-Interactive-Fashion-Commerce-Prototype', img: '/project-amara2.webp' },
-  { num: '03', type: 'BRAND IDENTITY · PACKAGING', title: 'VRIKOPRO', sub: 'Fitness Supplement Brand', desc: 'Logo, packaging, full visual language for a fitness brand. Built for a market that buys with its eyes and stays with trust.', tags: ['LOGO DESIGN', 'PACKAGING', 'BRAND SYSTEM'], link: 'https://www.behance.net/gallery/247084463/Vrikopro-Fitness-Supplement-Branding-Case-Study', img: '/project-vrikopro.webp' },
-  { num: '04', type: 'WEB UI · SAAS CONCEPT', title: 'AI SAAS', sub: 'Landing Page UX Concept', desc: 'High-converting SaaS landing page for an AI product. Aggressive visual hierarchy. Persuasion design baked into every section.', tags: ['SAAS UI', 'LANDING PAGE', 'CONVERSION UX'], link: 'https://www.behance.net/gallery/248945475/AI-SaaS-Landing-Page-UIUX-Concept', img: '/project-saas.webp' },
-  { num: '05', type: 'WEB PROTOTYPE · INTERACTIVE', title: 'DEFENDER', sub: 'Octa Black Web Prototype', desc: 'Dark-themed, premium interactive web prototype. Bold transitions that match the product identity. Built for power.', tags: ['WEB PROTOTYPE', 'DARK UI', 'PRODUCT DESIGN'], link: 'https://www.behance.net/gallery/242402253/DEFENDER-Octa-Black-Interactive-Web-Prototype', img: '/project-defender.webp' },
-  { num: '06', type: 'MOBILE APP · FOOD TECH', title: 'ZESTYY', sub: 'Food Delivery App', desc: 'Full UX case study. Research to final UI. Turns hunger into a three-tap order. Appetising from screen one.', tags: ['UX RESEARCH', 'MOBILE APP', 'USER JOURNEY'], link: 'https://www.behance.net/gallery/244617653/Zestyy-Food-Delivery-App-UIUX-Case-Study', img: '/project-zestyy.webp' },
+  { id: '01', title: 'AMARA APP', cat: 'FASHION COMMERCE EXPERIENCE', tags: ['FIGMA', 'MOBILE UI', 'E-COMMERCE', 'USER FLOWS'], img: 'project-amara.webp', link: 'https://www.behance.net/gallery/211756577/Amara-Making-Statements-Turning-Heads-(UIUX)' },
+  { id: '02', title: 'AMARA PROTOTYPE', cat: 'INTERACTIVE FIGMA PROTOTYPE', tags: ['FIGMA PROTOTYPE', 'INTERACTION', 'ANIMATION'], img: 'project-amara2.webp', link: 'https://www.behance.net/gallery/211756577/Amara-Making-Statements-Turning-Heads-(UIUX)' },
+  { id: '03', title: 'VRIKOPRO BRANDING', cat: 'CINEMATIC PACKAGING DESIGN', tags: ['ILLUSTRATOR', 'BRAND SYSTEM', 'PACKAGING'], img: '/project-vrikopro.webp', link: 'https://www.behance.net/udaykirankamble' },
+  { id: '04', title: 'AI SAAS PLATFORM', cat: 'LANDING PAGE ARCHITECTURE', tags: ['SAAS DESIGN', 'WEB UI', 'COMPONENTS'], img: 'project-saas.webp', link: 'https://www.behance.net/udaykirankamble' },
+  { id: '05', title: 'DEFENDER SYSTEM', cat: 'AUTOMOTIVE INTERFACE CONCEPT', tags: ['DASHBOARD UI', 'PROTOTYPING', 'HMI'], img: 'project-defender.webp', link: 'https://www.behance.net/udaykirankamble' },
+  { id: '06', title: 'ZESTYY PRODUCT', cat: 'BRAND IDENTITY SYSTEM', tags: ['LOGO DESIGN', 'TYPOGRAPHY', 'STRATEGY'], img: 'project-zestyy.webp', link: 'https://www.behance.net/udaykirankamble' }
 ]
 
 export default function Projects() {
-  const ref = useRef<HTMLElement>(null)
+  const containerRef = useRef<HTMLElement>(null)
+
   useEffect(() => {
-    ref.current?.querySelectorAll('.reveal').forEach(el => {
-      gsap.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } })
+    const section = containerRef.current
+    if (!section) return
+
+    ScrollTrigger.getAll().forEach(t => { if(t.trigger === section) t.kill() })
+
+    section.querySelectorAll('.split-reveal-projects').forEach((title) => {
+      const lines = title.querySelectorAll('.line-span')
+      gsap.fromTo(lines, 
+        { y: '100%' },
+        { 
+          y: '0%', 
+          duration: 1.0, 
+          ease: 'power4.out', 
+          stagger: 0.08,
+          scrollTrigger: { 
+            trigger: title, 
+            start: 'top 88%',
+            toggleActions: 'play none none reset'
+          }
+        }
+      )
     })
-    ref.current?.querySelectorAll('.p-card').forEach(card => {
-      gsap.fromTo(card, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: card, start: 'top 88%' } })
+
+    section.querySelectorAll('.p-card').forEach((card) => {
+      gsap.fromTo(card, { opacity: 0, y: 30 }, {
+        opacity: 1, 
+        y: 0, 
+        duration: 0.8, 
+        ease: 'power3.out', 
+        scrollTrigger: { 
+          trigger: card, 
+          start: 'top 90%',
+          toggleActions: 'play none none reset'
+        }
+      })
     })
   }, [])
 
@@ -29,63 +60,100 @@ export default function Projects() {
   const BODY: React.CSSProperties = { fontFamily: "'Barlow Condensed', sans-serif" }
 
   return (
-    <section ref={ref} id="work" style={{ background: '#000', padding: '140px 8vw', position: 'relative' }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #CC0000, transparent)' }} />
+    <section ref={containerRef} id="projects" style={{ background: '#000', padding: '120px max(4vw, 20px)' }}>
+      <style>{`
+        /* Clean 2-Column Side-by-Side Grid Architecture */
+        .projects-twin-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 32px;
+          max-width: 1440px;
+          margin: 0 auto;
+        }
+        @media (min-width: 768px) {
+          .projects-twin-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        .p-card {
+          background: #070707;
+          /* Fixed Default State: Visibly crisp light grey border line, no cloaking */
+          border: 1px solid rgba(255, 255, 255, 0.15) !important;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          text-decoration: none;
+        }
+        .p-img-container {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 16 / 10;
+          overflow: hidden;
+          background: #111;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .p-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          /* Removed Grayscale: Images are clean, vibrant, and fully visible at default */
+          filter: brightness(0.9);
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        /* Advanced Hover State Engine */
+        .p-card:hover {
+          border-color: #CC0000 !important;
+          box-shadow: 0 15px 40px rgba(204, 0, 0, 0.15);
+          transform: translateY(-4px);
+        }
+        .p-card:hover .p-img {
+          transform: scale(1.03);
+          filter: brightness(1.05);
+        }
+        .p-card:hover .p-title {
+          color: #CC0000 !important;
+        }
+      `}</style>
 
-      <div className="reveal section-label">003 — SELECTED WORK</div>
-      <h2 className="reveal" style={{ ...SLAB, fontSize: 'clamp(52px, 8vw, 110px)', lineHeight: 0.85, color: '#fff', marginBottom: '12px', textTransform: 'uppercase' }}>
-        CASES THAT<br /><span style={{ color: '#CC0000' }}>SPEAK.</span>
+      <div className="section-label">002 — SELECTED PLATFORM WORKS</div>
+      
+      <h2 className="split-reveal-projects" style={{ ...SLAB, fontSize: 'clamp(52px, 8vw, 110px)', lineHeight: 0.85, color: '#fff', marginBottom: '60px', textTransform: 'uppercase' }}>
+        <span className="line-wrapper"><span className="line-span">CASE</span></span>
+        <span className="line-wrapper"><span className="line-span" style={{ color: '#CC0000' }}>REPOSITORIES.</span></span>
       </h2>
-      <p className="reveal" style={{ ...BODY, fontSize: 'clamp(15px, 1.5vw, 18px)', color: 'rgba(240,237,232,0.4)', marginBottom: '80px', maxWidth: '540px' }}>
-        Six case studies. Six systems. Each one a full design story — from problem to pixel — published on Behance.
-      </p>
 
-  
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2px' }}>
+      <div className="projects-twin-grid">
         {projects.map((p) => (
-          <div key={p.num} className="p-card" style={{ background: '#0a0a0a', border: '1px solid rgba(204,0,0,0.15)', overflow: 'hidden', position: 'relative', cursor: 'none', opacity: 0, transition: 'border-color 0.3s' }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = '#CC0000'
-              const img = (e.currentTarget as HTMLElement).querySelector('.p-img') as HTMLElement
-              if (img) img.style.transform = 'scale(1.06)'
-              const overlay = (e.currentTarget as HTMLElement).querySelector('.p-overlay') as HTMLElement
-              if (overlay) overlay.style.opacity = '0.5'
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = 'rgba(204,0,0,0.15)'
-              const img = (e.currentTarget as HTMLElement).querySelector('.p-img') as HTMLElement
-              if (img) img.style.transform = 'scale(1)'
-              const overlay = (e.currentTarget as HTMLElement).querySelector('.p-overlay') as HTMLElement
-              if (overlay) overlay.style.opacity = '0.7'
-            }}
-          >
-            {/* Banner image */}
-            <div style={{ height: '220px', overflow: 'hidden', position: 'relative', background: '#161616' }}>
-              <img className="p-img" src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.6s ease', filter: 'brightness(0.7)' }}
-                onError={e => { (e.currentTarget as HTMLElement).style.display = 'none' }}
-              />
-              <div className="p-overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8))', opacity: 0.7, transition: 'opacity 0.4s' }} />
-
-              <div style={{ position: 'absolute', top: '20px', right: '20px', ...MONO, fontSize: '10px', letterSpacing: '0.2em', color: 'rgba(240,237,232,0.3)' }}>{p.num} / 06</div>
+          <a key={p.id} href={p.link} target="_blank" rel="noopener noreferrer" className="p-card">
+            
+            <div className="p-img-container">
+              <img src={p.img} alt={p.title} className="p-img" onError={(e)=>{e.currentTarget.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'}} />
+              <div style={{ position: 'absolute', top: '16px', right: '16px', ...MONO, fontSize: '11px', color: '#fff', background: 'rgba(0,0,0,0.75)', padding: '4px 10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                {p.id} / 06
+              </div>
             </div>
 
-            {/* Content */}
-            <div style={{ padding: '32px 32px 36px' }}>
-              <div style={{ ...SLAB, fontSize: 'clamp(32px, 3.5vw, 48px)', color: '#fff', lineHeight: 0.9, textTransform: 'uppercase', marginBottom: '4px' }}>{p.title}</div>
-              <div style={{ ...BODY, fontSize: '14px', fontWeight: 400, color: '#CC0000', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '16px' }}>{p.sub}</div>
-              <p style={{ ...BODY, fontSize: 'clamp(14px, 1.3vw, 16px)', fontWeight: 400, color: 'rgba(240,237,232,0.5)', lineHeight: 1.65, marginBottom: '20px' }}>{p.desc}</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '28px' }}>
-                {p.tags.map(t => (
-                  <span key={t} style={{ ...MONO, fontSize: '9px', letterSpacing: '0.2em', color: 'rgba(240,237,232,0.4)', border: '1px solid rgba(204,0,0,0.2)', padding: '4px 10px', textTransform: 'uppercase' }}>{t}</span>
+            <div style={{ padding: '28px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', background: '#0A0A0A' }}>
+              <div>
+                <h3 className="p-title" style={{ ...SLAB, fontSize: 'clamp(28px, 2.5vw, 38px)', color: '#fff', lineHeight: 1, marginBottom: '6px', transition: 'color 0.3s', textTransform: 'uppercase' }}>
+                  {p.title}
+                </h3>
+                <div style={{ ...MONO, fontSize: '11px', letterSpacing: '0.05em', color: '#CC0000', fontWeight: 'bold', marginBottom: '20px' }}>
+                  {p.cat}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+                {p.tags.map((t) => (
+                  <span key={t} style={{ ...MONO, fontSize: '10px', color: 'rgba(240,237,232,0.6)', border: '1px solid rgba(255,255,255,0.12)', padding: '4px 10px', background: 'rgba(255,255,255,0.02)' }}>
+                    {t}
+                  </span>
                 ))}
               </div>
-              <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', ...MONO, fontSize: '10px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#CC0000', textDecoration: 'none', borderBottom: '1px solid rgba(204,0,0,0.3)', paddingBottom: '4px', transition: 'gap 0.3s, border-color 0.3s' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.gap = '18px'; (e.currentTarget as HTMLElement).style.borderColor = '#CC0000' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.gap = '10px'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(204,0,0,0.3)' }}
-              >VIEW CASE STUDY →</a>
             </div>
-          </div>
+
+          </a>
         ))}
       </div>
     </section>

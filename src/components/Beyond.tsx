@@ -6,9 +6,37 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function Beyond() {
   const ref = useRef<HTMLElement>(null)
+  
   useEffect(() => {
+    // Reveal handler for labels, paragraphs, blockquotes, and images
     ref.current?.querySelectorAll('.reveal').forEach(el => {
+      // Skip the h2 element here so it doesn't conflict with our precise clip-path reveal
+      if (el.tagName === 'H2') return
+      
       gsap.fromTo(el, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } })
+    })
+
+    // Clean Scroll-Triggered masking slide-up animation directly on the original H2
+    ref.current?.querySelectorAll('h2.reveal').forEach(h2 => {
+      gsap.fromTo(h2, 
+        { 
+          opacity: 0,
+          clipPath: 'polygon(0 0, 100% 0, 100% 0%, 0 0%)',
+          y: 30
+        }, 
+        { 
+          opacity: 1,
+          clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+          y: 0,
+          duration: 1.1, 
+          ease: 'power4.out', 
+          scrollTrigger: { 
+            trigger: h2, 
+            start: 'top 88%',
+            toggleActions: 'play none none reset'
+          } 
+        }
+      )
     })
   }, [])
 
@@ -41,20 +69,20 @@ export default function Beyond() {
         {/* PHOTOS — reverse L shape */}
         <div className="reveal" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: 'auto auto', gap: '4px' }}>
           <div style={{ gridColumn: 'span 2', overflow: 'hidden', position: 'relative', height: '200px' }}>
-            <img src="/beyond-1.jpeg" alt="Students" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(50%) brightness(0.7)', transition: 'filter 0.5s, transform 0.5s' }}
+            <img src="beyond-1.jpeg" alt="Students" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(50%) brightness(0.7)', transition: 'filter 0.5s, transform 0.5s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.filter = 'grayscale(0%) brightness(0.9)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.04)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.filter = 'grayscale(50%) brightness(0.7)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
             />
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.6) 100%)', pointerEvents: 'none' }} />
           </div>
           <div style={{ overflow: 'hidden', position: 'relative', height: '160px' }}>
-            <img src="/beyond-1.jpeg" alt="Academy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(50%) brightness(0.7)', transition: 'filter 0.5s, transform 0.5s' }}
+            <img src="beyond-2.jpeg" alt="Academy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(50%) brightness(0.7)', transition: 'filter 0.5s, transform 0.5s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.filter = 'grayscale(0%) brightness(0.9)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.04)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.filter = 'grayscale(50%) brightness(0.7)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
             />
           </div>
           <div style={{ overflow: 'hidden', position: 'relative', height: '160px' }}>
-            <img src="/beyond-3.jpeg" alt="Trinity" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(50%) brightness(0.7)', transition: 'filter 0.5s, transform 0.5s' }}
+            <img src="beyond-3.jpeg" alt="Trinity" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(50%) brightness(0.7)', transition: 'filter 0.5s, transform 0.5s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.filter = 'grayscale(0%) brightness(0.9)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1.04)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.filter = 'grayscale(50%) brightness(0.7)'; (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
             />
