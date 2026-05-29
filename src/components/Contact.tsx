@@ -81,7 +81,7 @@ export default function Contact() {
       </h2>
 
       <p className="reveal-fade" style={{ ...BODY, fontSize: 'clamp(16px, 1.5vw, 20px)', color: 'rgba(240,237,232,0.5)', maxWidth: '680px', lineHeight: 1.6, marginBottom: '56px' }}>
-        Whether you are a **Corporate Talent Acquisition Lead** looking to anchor a high-octane visual designer to your full-time internal roster, or a **Private Brand Founder** looking to execute high-converting digital interfaces — let&apos;s build down the pipeline.
+        Whether you are a Corporate Talent Acquisition Lead looking to anchor a high-octane visual designer to your full-time internal roster, or a Private Brand Founder looking to execute high-converting digital interfaces — let&apos;s build down the pipeline.
       </p>
 
       <div className="reveal-fade" style={{ marginBottom: '64px', overflow: 'hidden' }}>

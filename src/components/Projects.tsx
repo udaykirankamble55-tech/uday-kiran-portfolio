@@ -60,7 +60,7 @@ export default function Projects() {
   const BODY: React.CSSProperties = { fontFamily: "'Barlow Condensed', sans-serif" }
 
   return (
-    <section ref={containerRef} id="projects" style={{ background: '#000', padding: '120px max(4vw, 20px)' }}>
+    <section ref={containerRef} id="repositories" style={{ background: '#000', padding: '120px max(4vw, 20px)' }}>
       <style>{`
         /* Clean 2-Column Side-by-Side Grid Architecture */
         .projects-twin-grid {
