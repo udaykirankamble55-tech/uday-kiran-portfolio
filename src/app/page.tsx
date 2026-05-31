@@ -12,6 +12,7 @@ import Beyond from '@/components/Beyond'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 import Marquee from '@/components/Marquee'
+import ScrollPrompt from '@/components/ScrollPrompt'
 
 export default function Home() {
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function Home() {
       <Cursor />
       <Intro />
       <Nav />
+      <ScrollPrompt />
       <ScrollyCanvas />
       <Marquee direction="left" />
       <About />

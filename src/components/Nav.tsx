@@ -10,6 +10,18 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
+    // 1. CRITICAL REFRESH FIX: Immediately capture position on mount
+    const handleScrollCheck = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true)
+      } else {
+        setScrolled(false)
+      }
+    }
+
+    // Run immediately before next paint to sync state with active scroll window
+    handleScrollCheck()
+
     // Entrance animation
     gsap.to(navRef.current, {
       opacity: 1,
@@ -17,8 +29,7 @@ export default function Nav() {
       delay: 3.6
     })
 
-    const onScroll = () => setScrolled(window.scrollY > 80)
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', handleScrollCheck, { passive: true })
 
     // ==========================================
     // PREMIUM GSAP MAGNETIC HOVER LOGIC
@@ -27,11 +38,9 @@ export default function Nav() {
     if (cta) {
       const handleMouseMove = (e: MouseEvent) => {
         const rect = cta.getBoundingClientRect()
-        // Calculate midpoints
         const relX = e.clientX - (rect.left + rect.width / 2)
         const relY = e.clientY - (rect.top + rect.height / 2)
 
-        // Pull button physically towards cursor within bounds (magnetic threshold multiplier)
         gsap.to(cta, {
           x: relX * 0.35,
           y: relY * 0.35,
@@ -41,7 +50,6 @@ export default function Nav() {
       }
 
       const handleMouseLeave = () => {
-        // Snap back instantly with crisp deceleration physics
         gsap.to(cta, {
           x: 0,
           y: 0,
@@ -54,13 +62,13 @@ export default function Nav() {
       cta.addEventListener('mouseleave', handleMouseLeave)
 
       return () => {
-        window.removeEventListener('scroll', onScroll)
+        window.removeEventListener('scroll', handleScrollCheck)
         cta.removeEventListener('mousemove', handleMouseMove)
         cta.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
 
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', handleScrollCheck)
   }, [])
 
   const linkStyle: React.CSSProperties = {
@@ -75,7 +83,6 @@ export default function Nav() {
     transition: 'color 0.3s',
   }
 
-  // Remapped accurately to align explicitly with your target section container ID
   const navigationLinks = [
     { name: 'About', id: 'about' },
     { name: 'Skills', id: 'skills' },
@@ -87,6 +94,15 @@ export default function Nav() {
   return (
     <>
       <style>{`
+        /* Dynamic state utility to prevent hard layout cuts on refresh */
+        nav.is-scrolled {
+          background: rgba(0, 0, 0, 0.90) !important;
+          backdrop-filter: blur(20px) !important;
+          -webkit-backdrop-filter: blur(20px) !important;
+          border-bottom: 1px solid rgba(204, 0, 0, 0.2) !important;
+          padding: 16px 6vw !important;
+        }
+
         .nav-link::after {
           content: '';
           position: absolute;
@@ -106,9 +122,6 @@ export default function Nav() {
           color: #fff !important;
         }
 
-        /* ==========================================
-           CINEMATIC GHOST RECTANGLE CTA INTERACTION
-        ========================================== */
         .nav-cta {
           font-family: 'DM Mono', monospace;
           font-size: 10px;
@@ -126,7 +139,6 @@ export default function Nav() {
           transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
         }
 
-        /* Multi-layered ghost stroke borders mapping to corners */
         .nav-cta::before, .nav-cta::after {
           content: '';
           position: absolute;
@@ -178,9 +190,6 @@ export default function Nav() {
           color: #CC0000;
         }
 
-        /* =========================
-           HAMBURGER BUTTON
-        ========================= */
         .mobile-menu-btn {
           display: none;
           flex-direction: column;
@@ -196,9 +205,6 @@ export default function Nav() {
           transition: all 0.3s ease;
         }
 
-        /* =========================
-           MOBILE MENU
-        ========================= */
         .mobile-menu {
           position: fixed;
           top: 72px;
@@ -224,70 +230,31 @@ export default function Nav() {
           text-decoration: none;
         }
 
-        /* =========================
-           TABLET RESPONSIVE
-        ========================= */
         @media (max-width: 1100px) {
-          .nav-links-center {
-            gap: 24px !important;
-          }
-          .nav-link {
-            font-size: 10px !important;
-            letter-spacing: 0.2em !important;
-          }
-          .nav-cta {
-            padding: 9px 18px !important;
-            font-size: 9px !important;
-          }
+          .nav-links-center { gap: 24px !important; }
+          .nav-link { font-size: 10px !important; letter-spacing: 0.2em !important; }
+          .nav-cta { padding: 9px 18px !important; font-size: 9px !important; }
         }
 
-        /* =========================
-           MOBILE RESPONSIVE
-        ========================= */
         @media (max-width: 900px) {
-          nav {
-            padding: 16px 5vw !important;
-          }
-          .nav-links-center {
-            display: none !important;
-          }
-          .mobile-menu-btn {
-            display: flex;
-          }
-          .nav-right {
-            gap: 12px !important;
-          }
-          .nav-cta {
-            padding: 8px 14px !important;
-            font-size: 8px !important;
-            letter-spacing: 0.18em !important;
-          }
-          .social-icon svg {
-            width: 14px !important;
-            height: 14px !important;
-          }
+          nav { padding: 16px 5vw !important; }
+          .nav-links-center { display: none !important; }
+          .mobile-menu-btn { display: flex; }
+          .nav-right { gap: 12px !important; }
+          .nav-cta { padding: 8px 14px !important; font-size: 8px !important; letter-spacing: 0.18em !important; }
+          .social-icon svg { width: 14px !important; height: 14px !important; }
         }
 
-        /* =========================
-           SMALL MOBILE
-        ========================= */
         @media (max-width: 480px) {
-          nav {
-            padding: 14px 4vw !important;
-          }
-          .nav-cta {
-            padding: 7px 10px !important;
-            font-size: 7px !important;
-          }
-          .social-icon svg {
-            width: 12px !important;
-            height: 12px !important;
-          }
+          nav { padding: 14px 4vw !important; }
+          .nav-cta { padding: 7px 10px !important; font-size: 7px !important; }
+          .social-icon svg { width: 12px !important; height: 12px !important; }
         }
       `}</style>
 
       <nav
         ref={navRef}
+        className={scrolled ? 'is-scrolled' : ''}
         style={{
           position: 'fixed',
           top: 0,
@@ -299,10 +266,11 @@ export default function Nav() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: scrolled ? 'rgba(0,0,0,0.9)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(204,0,0,0.2)' : '1px solid transparent',
-          transition: 'all 0.4s ease',
+          background: 'transparent',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          borderBottom: '1px solid transparent',
+          transition: 'background 0.4s ease, padding 0.4s ease, border-bottom 0.4s ease',
         }}
       >
         {/* LOGO */}
